@@ -7,6 +7,10 @@ version 0.15.1.
 
 Run `grunt` for building and `grunt serve` for preview.
 
-## Testing
+## Credits
 
-Running `grunt test` will run the unit tests with karma.
+Avatars [Designed by Freepik and distributed by Flaticon](http://www.flaticon.com/packs/avatar-set)
+
+Restaurant images from [pixabay.com](https://pixabay.com/)
+
+Prase data from [watchout4snakes.com](http://watchout4snakes.com/wo4snakes/Random/RandomParagraph)
