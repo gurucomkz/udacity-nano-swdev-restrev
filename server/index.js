@@ -1,11 +1,10 @@
 var express = require('express'),
     app = express(),
-    GtfsRealtimeBindings = require('gtfs-realtime-bindings'),
+    fs = require('fs'),
     request = require('request'),
-    api511key = '4bad51fb-4b43-4464-9f5e-e69576651176',
     port = process.env.PORT || 9001;
 
-var options = {
+var serveOptions = {
     dotfiles: 'ignore',
     etag: true,
     extensions: ['htm', 'html', 'json', 'txt'],
@@ -14,8 +13,6 @@ var options = {
     redirect: false
 };
 
-var MODE = 'online'; //online|offline|liefi|slow
-
 function CORS(req, res, next) {
     //CORS!
     res.set('Access-Control-Allow-Origin', '*');
@@ -23,41 +20,99 @@ function CORS(req, res, next) {
     next();
 }
 
-function checkMode(req, res, next) {
-    switch(MODE){
-        case 'offline':
-            res.sendStatus(500);
-            return;
-        case 'liefi':
-            //just forget
-            return;
-        case 'slow':
-            //wait 10 s
-            setTimeout(next, 20*1000);
-            return;
-        default: next();
-    }
+//data
+
+var restaurants = null;
+var reviews = null;
+var reviewers = null;
+
+var _reviewSorter = function(a,b) {
+    if(a.timestamp == b.timestamp) {return 0;}
+    return a.timestamp > b.timestamp?1:-1;
 }
 
-app.get('/setmode/:mode',function(req, res, next){
-    //here we process
-    MODE = req.params.mode;
-    res.send('OK');
-});
+function restaurantReviews(restId) {
+    return reviews
+            .filter(function(review) { return review.restaurantId == restId; })
+            .sort(_reviewSorter);
+}
+function reviewerReviews(reviewerId) {
+    return reviews
+            .filter(function(review) { return review.reviewerId == reviewerId; })
+            .sort(_reviewSorter);
+}
+function restaurantAvg(restId) {
+    var rvs = restaurantReviews(restId);
+    if(!rvs.length) {return 0;}
+    return rvs
+            .map(function(review) { return review.stars; })
+            .reduce(function(a, b) { return a + b; }) / rvs.length;
+}
+function getRestaurant(restId){
+    return restaurants.find(function(rest) { return res.params.restId === rest.id ; });
+}
+//load stuff
 
-app.get('/getmode',function(req, res, next){
-    res.json({
-        mode: MODE
+fs.readFileSync(__dirname + 'data/reviews', 'utf8', function(d) {
+    reviews = JSON.parse(d);
+    console.log('reviews fetched');
+});
+fs.readFileSync(__dirname + 'data/customers', 'utf8', function(d) {
+    reviewers = JSON.parse(d);
+    reviewers.forEach(function(rev) {
+        rev.reviewsNum = reviewerReviews(rev.id).length;
     });
+    console.log('reviewers fetched');
+});
+fs.readFileSync(__dirname + 'data/restaurants', 'utf8', function(d) {
+    restaurants = JSON.parse(d);
+    restaurants.forEach(function(rest) {
+        rest.average = restaurantAvg(rest.id);
+        rest.reviewsNum = restaurantReviews(rest.id).length;
+    });
+
+    console.log('restaurants fetched');
+});
+//----------
+
+app.use('/images', CORS, express.static(__dirname + '/images', serveOptions));
+app.use('/bower_components',express.static(__dirname + '/../bower_components', serveOptions));
+app.use('/', express.static(__dirname, serveOptions));
+
+
+
+app.get('/api/restaurants', CORS,
+function(req, res, next){
+    res.json(restaurants);
 });
 
-app.use('/gtfs', CORS, checkMode, express.static(__dirname + '/gtfs', options));
+app.get('/api/restaurant/:restId', CORS,
+function(req, res, next)
+    var data = {
+        restaurant: getRestaurant(res.params.restId),
+        reviews: restaurantReviews(res.params.restId)
+    };
 
-app.use('/', express.static(__dirname, options));
+    res.json(data);
+});
 
-app.use('/bower_components',express.static(__dirname + '/../bower_components', options));
+app.get('/api/reviewer/:reviewerId', CORS,
+function(req, res, next)
+    var data = {
+        reviewer: reviewers.find(function(r) { return res.params.reviewerId === r.id ; }),
+        reviews: reviewerReviews(res.params.reviewerId)
+    };
 
-app.get('/updates/:agency', CORS, checkMode,
+    res.json(data);
+});
+
+app.post('/api/reviews/:restId', CORS,
+function(req, res, next)
+
+});
+
+
+app.get('/updates/:agency', CORS,
 function(req, res, next){
     var agency = req.params.agency || 'caltrain';
     var requestSettings = {
