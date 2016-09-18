@@ -93,7 +93,7 @@ function newReview(){
 	$restaurant = $allRestaurants[array_rand($allRestaurants)];
 	$reviewer = $allReviewers[array_rand($allReviewers)];
 	return [
-		'reviewId' => rand(0, 1000000),
+		'id' => rand(0, 1000000),
 		'timestamp' => time() - $startDiff,
 		'reviewerId' => $reviewer['id'],
 		'restaurantId' => $restaurant['id'],
@@ -135,7 +135,7 @@ function _genPlaceName(){
 	global $sourcePlaceNames;
 
 	$rid = array_rand($sourcePlaceNames);
-	$rval = $sourcePlaceNames[$rid];
+	$rval = trim($sourcePlaceNames[$rid]);
 	unset($sourcePlaceNames[$rid]); //keep place names unique
 
 	return $rval;
@@ -144,7 +144,7 @@ function _genPlaceName(){
 function _genAddress(){
 	global $sourceStreets;
 
-	$rval = rand(1,200).' '.$sourceStreets[array_rand($sourceStreets)];
+	$rval = rand(1,200).' '.trim($sourceStreets[array_rand($sourceStreets)]);
 
 	return $rval;
 }
