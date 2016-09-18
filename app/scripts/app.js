@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * @ngdoc overview
  * @name restRevApp
@@ -9,28 +7,25 @@
  * Main module of the application.
  */
 angular
-  .module('restRevApp', [
+.module('restRevApp', [
     'ngAria',
     'ngCookies',
     'ngMessages',
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
-  ])
-  .config(function ($routeProvider) {
+    'ngMaterial'
+])
+.config(function ($routeProvider) {
+    'use strict';
+
     $routeProvider
-      .when('/', {
+    .when('/', {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl',
         controllerAs: 'main'
-      })
-      .when('/about', {
-        templateUrl: 'views/about.html',
-        controller: 'AboutCtrl',
-        controllerAs: 'about'
-      })
-      .otherwise({
+    })
+    .otherwise({
         redirectTo: '/'
-      });
-  });
+    });
+});
