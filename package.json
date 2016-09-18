@@ -41,6 +41,7 @@
     "test": "karma start test/karma.conf.js"
   },
   "dependencies": {
+    "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "fs": "0.0.1-security",
     "grunt-multi-servers": "0.0.2",
