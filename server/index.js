@@ -1,7 +1,9 @@
 var express = require('express'),
-    app = express(),
+    bodyParser = require('body-parser'),
     fs = require('fs'),
     request = require('request'),
+
+    app = express(),
     port = process.env.PORT || 9001;
 
 var serveOptions = {
@@ -31,12 +33,24 @@ var _reviewSorter = function(a,b) {
     return a.timestamp > b.timestamp?1:-1;
 }
 
+function _getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 function restaurantReviews(restId) {
+    restId = parseInt(restId);
     return reviews
             .filter(function(review) { return review.restaurantId == restId; })
+            .map(function(review) {
+                review.reviewer = getReviewer(review.reviewerId);
+                return review;
+            })
             .sort(_reviewSorter);
 }
 function reviewerReviews(reviewerId) {
+    reviewerId = parseInt(reviewerId);
     return reviews
             .filter(function(review) { return review.reviewerId == reviewerId; })
             .sort(_reviewSorter);
@@ -49,30 +63,56 @@ function restaurantAvg(restId) {
             .reduce(function(a, b) { return a + b; }) / rvs.length;
 }
 function getRestaurant(restId){
-    return restaurants.find(function(rest) { return res.params.restId === rest.id ; });
+    restId = parseInt(restId);
+    return restaurants.find(function(rest) { return restId === rest.id ; });
+}
+function getReviewer(revId){
+    revId = parseInt(revId);
+    return reviewers.find(function(rev) { return revId === rev.id ; });
 }
 //load stuff
 
-fs.readFileSync(__dirname + 'data/reviews', 'utf8', function(d) {
-    reviews = JSON.parse(d);
-    console.log('reviews fetched');
-});
-fs.readFileSync(__dirname + 'data/customers', 'utf8', function(d) {
-    reviewers = JSON.parse(d);
-    reviewers.forEach(function(rev) {
-        rev.reviewsNum = reviewerReviews(rev.id).length;
+function loadReviews() {
+    return new Promise(function(resolve, reject) {
+        fs.readFile(__dirname + '/data/reviews.json', 'utf8', function(err, d) {
+            reviews = JSON.parse(d);
+            console.log('reviews fetched');
+            resolve();
+        });
     });
-    console.log('reviewers fetched');
-});
-fs.readFileSync(__dirname + 'data/restaurants', 'utf8', function(d) {
-    restaurants = JSON.parse(d);
-    restaurants.forEach(function(rest) {
-        rest.average = restaurantAvg(rest.id);
-        rest.reviewsNum = restaurantReviews(rest.id).length;
-    });
+}
 
-    console.log('restaurants fetched');
-});
+function loadReviewers() {
+    return new Promise(function(resolve, reject) {
+        fs.readFile(__dirname + '/data/customers.json', 'utf8', function(err, d) {
+            reviewers = JSON.parse(d);
+            reviewers.forEach(function(rev) {
+                rev.reviewsNum = reviewerReviews(rev.id).length;
+            });
+            console.log('reviewers fetched');
+            resolve();
+        });
+    });
+}
+
+function loadRestaurants() {
+    return new Promise(function(resolve, reject) {
+        fs.readFile(__dirname + '/data/restaurants.json', 'utf8', function(err, d) {
+            restaurants = JSON.parse(d);
+            restaurants.forEach(function(rest) {
+                rest.average = restaurantAvg(rest.id);
+                rest.reviewsNum = restaurantReviews(rest.id).length;
+            });
+
+            console.log('restaurants fetched');
+            resolve();
+        });
+    });
+}
+
+loadReviews().then(loadReviewers).then(loadRestaurants);
+
+
 //----------
 
 app.use('/images', CORS, express.static(__dirname + '/images', serveOptions));
@@ -89,8 +129,8 @@ function(req, res, next){
 app.get('/api/restaurant/:restId', CORS,
 function(req, res, next){
     var data = {
-        restaurant: getRestaurant(res.params.restId),
-        reviews: restaurantReviews(res.params.restId)
+        restaurant: getRestaurant(req.params.restId),
+        reviews: restaurantReviews(req.params.restId)
     };
 
     res.json(data);
@@ -99,64 +139,34 @@ function(req, res, next){
 app.get('/api/reviewer/:reviewerId', CORS,
 function(req, res, next){
     var data = {
-        reviewer: reviewers.find(function(r) { return res.params.reviewerId === r.id ; }),
-        reviews: reviewerReviews(res.params.reviewerId)
+        reviewer: reviewers.find(function(r) { return req.params.reviewerId === r.id ; }),
+        reviews: reviewerReviews(req.params.reviewerId)
     };
 
     res.json(data);
 });
 
-app.post('/api/reviews/:restId', CORS,
+app.post('/api/reviews/:restId', CORS, bodyParser.json(),
 function(req, res, next){
     var now = Math.floor((new Date()).getTime()/1000);
-    
+
 });
 
-
-app.get('/updates/:agency', CORS,
+app.put('/api/reviewers', CORS, bodyParser.json(),
 function(req, res, next){
-    var agency = req.params.agency || 'caltrain';
-    var requestSettings = {
-        method: 'GET',
-        url: 'https://api.511.org/transit/TripUpdates?format=json&agency='+agency+'&api_key=' + api511key,
-        encoding: null
+    var now = Math.floor((new Date()).getTime()/1000),
+        newId = reviewers.reduce(function(a,b){ return Math.max(a.id, b.id);}) + 1,
+        newAva = ["images/avatars/", _getRandomIntInclusive(1,9) ,".jpg"].join('');
+
+    var newReviewer = {
+        "id": newId,
+        "name": req.body.name,
+        "email": req.body.email,
+        "joined": now,
+        "avatar": newAva
     };
 
-    request(requestSettings, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            var feed = GtfsRealtimeBindings.FeedMessage.decode(body),
-                respObject = {
-                    agency: agency,
-                    updates: [],
-                    source: feed
-                };
-            feed.entity.forEach(function(entity) {
-                if (entity.trip_update) {
-                    var respEntry = {
-                        vehicle: entity.trip_update.vehicle.id,
-                        tripId: entity.trip_update.trip.trip_id,
-                        stops:{}
-                    };
-                    if(entity.trip_update.stop_time_update){
-                        entity.trip_update.stop_time_update.forEach(function(update) {
-                            var updateEntry = {
-                                stopId: update.stop_id,
-                                arrival: update.arrival && update.arrival.time ? (update.arrival.time.low || update.arrival.time.high) : null,
-                                departure: update.departure && update.departure.time ? (update.departure.time.low || update.departure.time.high) : null
-                            };
-                            respEntry.stops[update.stop_id] = updateEntry;
-                        });
-                    }
-                    respObject.updates.push(respEntry);
-                    //console.log(entity.trip_update);
-                }
-            });
-            res.json(respObject);
-        }else{
-            res.json([]);
-        }
-    });
-
+    res.json(newReviewer);
 });
 
 app.listen(port);
