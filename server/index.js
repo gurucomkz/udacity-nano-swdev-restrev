@@ -87,7 +87,7 @@ function(req, res, next){
 });
 
 app.get('/api/restaurant/:restId', CORS,
-function(req, res, next)
+function(req, res, next){
     var data = {
         restaurant: getRestaurant(res.params.restId),
         reviews: restaurantReviews(res.params.restId)
@@ -97,7 +97,7 @@ function(req, res, next)
 });
 
 app.get('/api/reviewer/:reviewerId', CORS,
-function(req, res, next)
+function(req, res, next){
     var data = {
         reviewer: reviewers.find(function(r) { return res.params.reviewerId === r.id ; }),
         reviews: reviewerReviews(res.params.reviewerId)
@@ -107,8 +107,9 @@ function(req, res, next)
 });
 
 app.post('/api/reviews/:restId', CORS,
-function(req, res, next)
-
+function(req, res, next){
+    var now = Math.floor((new Date()).getTime()/1000);
+    
 });
 
 
