@@ -25,6 +25,11 @@ angular
         controller: 'MainCtrl',
         controllerAs: 'main'
     })
+    .when('/restaurant/:restaurantId', {
+        templateUrl: 'views/restaurant.html',
+        controller: 'RestaurantCtrl',
+        controllerAs: 'ctrl'
+    })
     .otherwise({
         redirectTo: '/'
     });

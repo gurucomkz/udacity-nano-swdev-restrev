@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * @ngdoc function
  * @name restRevApp.controller:MainCtrl
@@ -8,10 +6,17 @@
  * Controller of the restRevApp
  */
 angular.module('restRevApp')
-  .controller('MainCtrl', function () {
-    this.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
-  });
+.controller('MainCtrl', [
+    '$scope',
+    'RestData',
+function ($scope, RestData) {
+    'use strict';
+    var main = this;
+
+    RestData.getRestaurants()
+    .then(function(data) {
+        main.restaurants = data;
+        $scope.$apply();
+    });
+
+}]);

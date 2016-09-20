@@ -1,23 +1,29 @@
-<div class="jumbotron">
-  <h1>'Allo, 'Allo!</h1>
-  <p class="lead">
-    <img src="images/yeoman.png" alt="I'm Yeoman"><br>
-    Always a pleasure scaffolding your apps.
-  </p>
-  <p><a class="btn btn-lg btn-success" ng-href="#/">Splendid!<span class="glyphicon glyphicon-ok"></span></a></p>
-</div>
+<md-toolbar class="md-whiteframe-glow-z1 site-content-toolbar">
+    <div class="md-toolbar-tools">
+        <h3>
+            <span>Restaurants</span>
+        </h3>
+    </div>
+</md-toolbar>
 
-<div class="row marketing">
-  <h4>HTML5 Boilerplate</h4>
-  <p>
-    HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.
-  </p>
+<md-content flex>
+    <md-card ng-repeat="restaurant in main.restaurants" tabindex="0">
+    	<img ng-src="{{restaurant.image}}" class="md-card-image" aria-hidden="true">
+    	<md-card-title>
+    		<md-card-title-text>
+    			<span class="md-headline">{{restaurant.name}}</span>
+    			<span class="md-subhead" aria-label="{{restaurant.average}} stars by average">
+    				<i ng-repeat="n in restaurant.average|range" class="fa fa-star" aria-hidden="true"></i>
+    			</span>
+    		</md-card-title-text>
+    	</md-card-title>
+    	<md-card-content>
+    		<p aria-label="Address"><i class="fa fa-map-marker"></i>{{restaurant.address}}</p>
+    	</md-card-content>
+    	<md-card-actions layout="row" layout-align="end center">
+            <md-button ng-href="#/restaurant/{{restaurant.id}}">See reviews</md-button>
+            <md-button ng-href="#/write/{{restaurant.id}}">Write own review</md-button>
+        </md-card-actions>
+    </md-card>
 
-  <h4>Angular</h4>
-  <p>
-    AngularJS is a toolset for building the framework most suited to your application development.
-  </p>
-
-  <h4>Karma</h4>
-  <p>Spectacular Test Runner for JavaScript.</p>
-</div>
+</md-content>
