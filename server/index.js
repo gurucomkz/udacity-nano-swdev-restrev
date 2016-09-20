@@ -4,12 +4,13 @@ var express = require('express'),
     request = require('request'),
 
     app = express(),
-    port = process.env.PORT || 9001;
+    port = process.env.PORT || 9001,
+    myURL = 'http://localhost:'+port;
 
 var serveOptions = {
     dotfiles: 'ignore',
     etag: true,
-    extensions: ['htm', 'html', 'json', 'txt'],
+    extensions: ['htm', 'html', 'json', 'txt', 'jpg', 'png'],
     index: 'index.html',
     maxAge: '1d',
     redirect: false
@@ -87,6 +88,7 @@ function loadReviewers() {
         fs.readFile(__dirname + '/data/customers.json', 'utf8', function(err, d) {
             reviewers = JSON.parse(d);
             reviewers.forEach(function(rev) {
+                rev.avatar = myURL + rev.avatar;
                 rev.reviewsNum = reviewerReviews(rev.id).length;
             });
             console.log('reviewers fetched');
@@ -100,6 +102,7 @@ function loadRestaurants() {
         fs.readFile(__dirname + '/data/restaurants.json', 'utf8', function(err, d) {
             restaurants = JSON.parse(d);
             restaurants.forEach(function(rest) {
+                rest.image = myURL + rest.image;
                 rest.average = restaurantAvg(rest.id);
                 rest.reviewsNum = restaurantReviews(rest.id).length;
             });
@@ -115,7 +118,7 @@ loadReviews().then(loadReviewers).then(loadRestaurants);
 
 //----------
 
-app.use('/images', CORS, express.static(__dirname + '/images', serveOptions));
+app.use('/images', express.static(__dirname + '/images', serveOptions));
 app.use('/bower_components',express.static(__dirname + '/../bower_components', serveOptions));
 app.use('/', express.static(__dirname, serveOptions));
 
@@ -156,7 +159,7 @@ app.put('/api/reviewers', CORS, bodyParser.json(),
 function(req, res, next){
     var now = Math.floor((new Date()).getTime()/1000),
         newId = reviewers.reduce(function(a,b){ return Math.max(a.id, b.id);}) + 1,
-        newAva = ["images/avatars/", _getRandomIntInclusive(1,9) ,".jpg"].join('');
+        newAva = ["/images/avatars/", _getRandomIntInclusive(1,9) ,".png"].join('');
 
     var newReviewer = {
         "id": newId,
