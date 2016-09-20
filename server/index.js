@@ -59,9 +59,10 @@ function reviewerReviews(reviewerId) {
 function restaurantAvg(restId) {
     var rvs = restaurantReviews(restId);
     if(!rvs.length) {return 0;}
-    return rvs
+    var avg = rvs
             .map(function(review) { return review.stars; })
             .reduce(function(a, b) { return a + b; }) / rvs.length;
+    return Math.floor(avg);
 }
 function getRestaurant(restId){
     restId = parseInt(restId);

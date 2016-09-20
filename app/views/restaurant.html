@@ -1,8 +1,11 @@
 <md-toolbar class="md-whiteframe-glow-z1 site-content-toolbar">
     <div class="md-toolbar-tools">
-        <h3>
+		<div>
+			<md-button role="button" ng-href="#/" class="md-icon-button" aria-label="Back to all restaurants"><span class="fa fa-arrow-left"></span></md-button>
+		</div>
+        <h1 tabindex="0">
             <span>{{restaurant.name}}</span>
-        </h3>
+        </h1>
 		<span flex></span>
 		<div>
 			<md-button ng-href="#/write/{{restaurant.id}}" class="md-icon-button" aria-label="Write review"><span class="fa fa-pencil"></span></md-button>
@@ -11,20 +14,25 @@
 </md-toolbar>
 
 <md-content flex>
-	<md-whiteframe class="md-whiteframe-1dp" layout="column">
-		<img ng-src="{{restaurant.image}}" alt="Picture of {{restaurant.name}}">
-		<div  layout="column" layout-padding>
-			<span class="md-headline">{{restaurant.name}}</span>
-			<span class="md-subhead" aria-label="{{restaurant.average}} stars by average">
-				<i ng-repeat="n in restaurant.average|range" class="fa fa-star" aria-hidden="true"></i>
-			</span>
-			<span class="md-subhead" aria-label="Address"><i class="fa fa-map-marker"></i> {{restaurant.address}}</span>
-		</div>
+	<header aria-atomic="true" tabindex="0">
+		<md-whiteframe class="md-whiteframe-1dp" layout="column">
+			<img ng-src="{{restaurant.image}}" alt="Picture of {{restaurant.name}}" aria-hidden="true">
+			<div  layout="column" layout-padding>
+				<span class="md-headline">{{restaurant.name}}</span>
+				<span class="md-subhead" id="starRating" aria-label="{{restaurant.average}} stars by average">
+					<i ng-repeat="n in restaurant.average|range" class="fa fa-star"></i>
+				</span>
+				<span class="md-subhead">
+					<i class="fa fa-map-marker"></i>
+					{{restaurant.address}}
+				</span>
+			</div>
 
-	</md-whiteframe>
+		</md-whiteframe>
+	</header>
 
 	<section id="reviewContainer">
-      <md-subheader class="md-primary">Reviews</md-subheader>
+      	<md-subheader class="md-primary">Reviews</md-subheader>
 		<md-card ng-repeat="review in reviews" aria-label="Review from {{review.reviewer.name}}" role="article" tabindex="0">
 			<md-card-header aria-hidden="true">
 				<md-card-avatar>
@@ -37,13 +45,13 @@
 			</md-card-header>
 			<md-card-title>
 				<md-card-title-text>
-					<span class="md-headline">{{review.title}}</span>
-					<span class="md-subhead" aria-label="{{review.stars}} stars">
+					<h2 class="md-headline" tabindex="0">{{review.title}}</h2>
+					<span class="md-subhead" aria-label="{{review.stars}} stars" tabindex="0">
 						<i ng-repeat="n in review.stars|range" class="fa fa-star"></i>
 					</span>
 				</md-card-title-text>
 			</md-card-title>
-			<md-card-content ng-bind-html="review.text"></md-card-content>
+			<md-card-content ng-bind-html="review.text" tabindex="0"></md-card-content>
 		</md-card>
 	</section>
 
