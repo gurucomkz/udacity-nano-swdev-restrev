@@ -14,6 +14,9 @@ angular.module('restRevApp')
         if(typeof input !== 'number') {
             return input;
         }
-        return new Array(input);
+        input = parseInt(input);
+        var ret = [];
+        for(var i=0; i<input; i++){ ret.push(i); }
+        return ret;
     };
 });
