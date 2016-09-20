@@ -9,11 +9,11 @@
     "angular-resource": "^1.4.0",
     "angular-route": "^1.4.0",
     "angular-sanitize": "^1.4.0",
-    "angular-material": "^1.1.1"
+    "angular-material": "^1.1.1",
+    "components-font-awesome": "^4.6.3"
   },
   "devDependencies": {
-    "angular-mocks": "^1.4.0",
-    "font-awesome": "^4.6.3"
+    "angular-mocks": "^1.4.0"
   },
   "appPath": "app",
   "moduleName": "restRevApp"
