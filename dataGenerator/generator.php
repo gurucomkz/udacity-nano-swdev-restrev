@@ -34,7 +34,7 @@ function genRestaurants(){
 	$ret = [];
 
 	for($x = 0; $x < $numberRestaurants; $x++){
-		$image = "images/restaurants/".(rand(1,20)).".jpg";
+		$image = "/images/restaurants/".(rand(1,20)).".jpg";
 		$ret[] = [
 			"id" => $x+1,
 			"name" => _genPlaceName(),
@@ -51,7 +51,7 @@ function getReviewers(){
 	$ret = [];
 
 	for($x = 0; $x < $numberReviewers; $x++){
-		$ava = "images/avatars/".(rand(1,9)).".jpg";
+		$ava = "/images/avatars/".(rand(1,9)).".png";
 		$monthsPayed = rand(0, 30);
 		$month = 86400*30;
 
@@ -194,7 +194,7 @@ function _getRandText(){
 	global $sourceParagraphs;
     $r = [];
     $pis = array_keys($sourceParagraphs);
-    $rc = rand(4, 8);
+    $rc = rand(2, 5);
     for($i =0; $i < $rc; $i++) {
         $t = rand(0, count($pis)-1);
         $r[] = $sourceParagraphs[$pis[$t]];
