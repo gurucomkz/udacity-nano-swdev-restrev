@@ -30,6 +30,11 @@ angular
         controller: 'RestaurantCtrl',
         controllerAs: 'ctrl'
     })
+    .when('/writereview/:restaurantId', {
+        templateUrl: 'views/writereview.html',
+        controller: 'WritereviewCtrl',
+        controllerAs: 'writereview'
+    })
     .otherwise({
         redirectTo: '/'
     });
