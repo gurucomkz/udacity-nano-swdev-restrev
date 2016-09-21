@@ -29,7 +29,7 @@
 <md-content flex>
     <section id="restaurantListContainer">
         <md-card ng-repeat="restaurant in main.restaurants">
-        	<img ng-src="{{restaurant.image}}" class="md-card-image" aria-hidden="true">
+        	<img ng-src="{{restaurant.image}}" class="md-card-image" alt="Interrior picture of {{restaurant.name}}">
         	<md-card-title>
         		<md-card-title-text>
         			<h2 class="md-headline" aria-label="{{restaurant.name}}. {{restaurant.average}} stars by average">
