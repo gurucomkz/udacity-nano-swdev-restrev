@@ -30,7 +30,7 @@ angular
         controller: 'RestaurantCtrl',
         controllerAs: 'ctrl'
     })
-    .when('/writereview/:restaurantId', {
+    .when('/writereview/:restaurantId/:restaurantName', {
         templateUrl: 'views/writereview.html',
         controller: 'WritereviewCtrl',
         controllerAs: 'writereview'

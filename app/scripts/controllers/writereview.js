@@ -9,7 +9,11 @@
  */
 angular.module('restRevApp')
 .controller('WritereviewCtrl', [
-
-function () {
-
+    '$scope',
+    '$routeParams',
+function ($scope, $routeParams) {
+    $scope.restaurant = {
+        id: $routeParams.restaurantId,
+        name: $routeParams.restaurantName
+    };
 }]);
