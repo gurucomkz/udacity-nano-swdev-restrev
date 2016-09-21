@@ -11,7 +11,7 @@
 angular.module('restRevApp')
 .filter('range', function () {
     return function (input) {
-        if(typeof input !== 'number') {
+        if(typeof input !== 'number' && typeof input !== 'string') {
             return input;
         }
         input = parseInt(input);
