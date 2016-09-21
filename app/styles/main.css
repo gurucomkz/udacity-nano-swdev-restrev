@@ -70,5 +70,9 @@ md-icon.fa{
 
 /* ACCESSIBILITY: CONTRAST */
 md-input-container label{
-    color: rgb(115, 115, 115);
+    color: #565656;
+}
+
+.md-button.md-raised[disabled]{
+    color: #616161
 }
