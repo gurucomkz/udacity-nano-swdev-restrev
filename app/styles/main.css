@@ -62,3 +62,9 @@ md-whiteframe img {
 
 
 }
+
+
+/* ACCESSIBILITY: CONTRAST */
+md-input-container label{
+    color: rgb(115, 115, 115);
+}
