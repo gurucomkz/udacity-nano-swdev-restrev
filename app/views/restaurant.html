@@ -1,8 +1,8 @@
-<md-toolbar class="md-whiteframe-glow-z1 site-content-toolbar">
+<md-toolbar class="md-whiteframe-glow-z1 site-content-toolbar" role="toolbar">
     <div class="md-toolbar-tools">
-		<div>
+		<nav>
 			<md-button role="button" ng-href="#/" class="md-icon-button" aria-label="Back to all restaurants"><span class="fa fa-arrow-left"></span></md-button>
-		</div>
+		</nav>
         <h1>
             <span>{{restaurant.name}}</span>
         </h1>
@@ -13,8 +13,8 @@
     </div>
 </md-toolbar>
 
-<md-content flex>
-	<header aria-atomic="true">
+<md-content flex role="header">
+	<section aria-atomic="true">
 		<md-whiteframe class="md-whiteframe-1dp" layout="column">
 			<img ng-src="{{restaurant.image}}"  alt="Interrior picture of {{restaurant.name}}">
 			<div  layout="column" layout-padding>
@@ -41,7 +41,7 @@
 				</div>
 			</div>
 		</md-whiteframe>
-	</header>
+	</section>
 
 	<section id="reviewContainer">
       	<md-subheader class="md-primary">Reviews</md-subheader>
