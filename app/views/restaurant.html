@@ -1,5 +1,5 @@
-<md-toolbar class="md-whiteframe-glow-z1 site-content-toolbar" role="toolbar">
-    <div class="md-toolbar-tools">
+<md-toolbar class="md-whiteframe-glow-z1 site-content-toolbar">
+    <header class="md-toolbar-tools">
 		<nav>
 			<md-button role="button" ng-href="#/" class="md-icon-button" aria-label="Back to all restaurants"><span class="fa fa-arrow-left"></span></md-button>
 		</nav>
@@ -10,10 +10,11 @@
 		<div>
 			<md-button ng-href="#/writereview/{{restaurant.id}}/{{restaurant.name}}" class="md-icon-button" aria-label="Write review"><span class="fa fa-pencil"></span></md-button>
 		</div>
-    </div>
+    </header>
 </md-toolbar>
 
-<md-content flex role="header">
+<md-content flex>
+<main>
 	<section aria-atomic="true">
 		<md-whiteframe class="md-whiteframe-1dp" layout="column">
 			<img ng-src="{{restaurant.image}}"  alt="Interrior picture of {{restaurant.name}}">
@@ -67,5 +68,5 @@
 		</md-card>
 	</section>
 
-
+</main>
 </md-content>
