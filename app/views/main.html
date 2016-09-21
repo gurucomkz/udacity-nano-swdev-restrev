@@ -3,29 +3,50 @@
         <h1 tabindex="0">
             <span>Restaurants</span>
         </h2>
+        <span flex /></span>
+        <div>
+            <md-menu>
+                <md-button aria-controls="restaurantListContainer" aria-label="Open filter options menu" class="md-icon-button" ng-click="openFilterMenu($mdOpenMenu, $event)">
+                    <md-icon md-menu-origin class="fa fa-filter"></md-icon>
+                </md-button>
+                <md-menu-content width="4">
+                    <md-menu-item>
+                        <md-button ng-click="setFilter(0)">
+                            <md-icon md-menu-align-target class="fa fa-circle-o"></md-icon> Show all restaurants
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item ng-repeat="star in 5|rrange" ng-show="starStats[star+1]" >
+                        <md-button ng-click="setFilter(star+1)" aria-label="Show restaurants with {{star+1}}-star average">
+                            <md-icon ng-repeat="s in (star+1)|rrange" class="fa fa-star"></md-icon>
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
     </div>
 </md-toolbar>
 
 <md-content flex>
-    <md-card ng-repeat="restaurant in main.restaurants">
-    	<img ng-src="{{restaurant.image}}" class="md-card-image" aria-hidden="true">
-    	<md-card-title>
-    		<md-card-title-text>
-    			<h2 class="md-headline" tabindex="0" aria-label="{{restaurant.name}}. {{restaurant.average}} stars by average">
-                    {{restaurant.name}}
-                </h2>
-    			<span class="md-subhead">
-    				<i ng-repeat="n in restaurant.average|range" class="fa fa-star"></i>
-    			</span>
-    		</md-card-title-text>
-    	</md-card-title>
-    	<md-card-content>
-    		<p aria-label="Address: {{restaurant.address}}" tabindex="0"><i class="fa fa-map-marker"></i>{{restaurant.address}}</p>
-    	</md-card-content>
-    	<md-card-actions layout="row" layout-align="end center">
-            <md-button ng-href="#/restaurant/{{restaurant.id}}" role="button">See reviews</md-button>
-            <md-button ng-href="#/writereview/{{restaurant.id}}/{{restaurant.name}}" role="button">Write own review</md-button>
-        </md-card-actions>
-    </md-card>
-
+    <section id="restaurantListContainer">
+        <md-card ng-repeat="restaurant in main.restaurants">
+        	<img ng-src="{{restaurant.image}}" class="md-card-image" aria-hidden="true">
+        	<md-card-title>
+        		<md-card-title-text>
+        			<h2 class="md-headline" tabindex="0" aria-label="{{restaurant.name}}. {{restaurant.average}} stars by average">
+                        {{restaurant.name}}
+                    </h2>
+        			<span class="md-subhead">
+        				<i ng-repeat="n in restaurant.average|range" class="fa fa-star"></i>
+        			</span>
+        		</md-card-title-text>
+        	</md-card-title>
+        	<md-card-content>
+        		<p aria-label="Address: {{restaurant.address}}" tabindex="0"><i class="fa fa-map-marker"></i> {{restaurant.address}}</p>
+        	</md-card-content>
+        	<md-card-actions layout="row" layout-align="end center">
+                <md-button ng-href="#/restaurant/{{restaurant.id}}" role="button">See reviews</md-button>
+                <md-button ng-href="#/writereview/{{restaurant.id}}/{{restaurant.name}}" role="button">Write own review</md-button>
+            </md-card-actions>
+        </md-card>
+    </section>
 </md-content>
