@@ -4,31 +4,49 @@
 			<md-button role="button" ng-href="#/" class="md-icon-button" aria-label="Back to all restaurants"><span class="fa fa-arrow-left"></span></md-button>
 		</div>
         <h1 tabindex="0">
-            <span>Your review</span>
+            <span>Writing review</span>
         </h1>
 		<span flex></span>
-		<div>
-			<md-button ng-click="saveReview()" id="publishButton">Publish</md-button>
-		</div>
     </div>
 </md-toolbar>
 <md-content flex>
-	<md-whiteframe class="md-whiteframe-1dp" layout="column" layout-padding aria-owns="publishButton">
-		<div>
-			 <h2>{{restaurant.name}}</h2>
-		</div>
-		<form name="reviewForm" layout="column">
-			<div>
-				<label id="labelOveral">Your overall experience</label>
-				<md-radio-group ng-model="review.stars" layout="row" layout-padding required aria-labeledby="labelOveral">
-					<md-radio-button ng-repeat="star in 5|range" value="{{star+1}}" aria-label="{{star+1}} stars"></md-radio-button>
-			    </md-radio-group>
+	<md-whiteframe class="md-whiteframe-1dp" layout="column" layout-padding >
+		<form name="reviewForm" id="reviewForm" layout="column" aria-flowto="publishButton">
+            <section labelledby="yourCredsLabel" layout="column">
+                <h3 id="yourCredsLabel">Your Credentials</h2>
+                <md-input-container>
+    				<label>Your name</label>
+    				<input ng-model="author.name" name="authorName" required ng-disabled="sending">
+                    <div ng-messages="reviewForm.authorName.$error" role="alert">
+                        <div ng-message="required">You must supply your name.</div>
+                    </div>
+    			</md-input-container>
+                <md-input-container>
+    				<label>Your email</label>
+    				<input ng-model="author.email" name="email" type="email"  ng-pattern="/^.+@.+\..+$/"  required ng-disabled="sending">
+                    <div ng-messages="reviewForm.email.$error" role="alert" multiple>
+                        <div ng-message="required">You must supply your email.</div>
+                        <div ng-message="pattern">That doesn't look like a valid email.</div>
+                    </div>
+    			</md-input-container>
+            </section>
+            <section labelledby="yourReviewLabel" layout="column">
+    			<h3 id="yourReviewLabel">Your review for &laquo;{{restaurant.name}}&raquo;</h2>
 
-			</div>
-			<md-input-container>
-				<label>Text of your review</label>
-				<textarea ng-model="review.text" md-maxlength="5000" rows="5" md-select-on-focus required></textarea>
-			</md-input-container>
+    			<md-input-container>
+    				<span id="labelOveral">Your overall experience</span>
+    				<md-radio-group ng-model="review.stars" layout="row" layout-padding required aria-labelledby="labelOveral" ng-disabled="sending">
+    					<md-radio-button ng-repeat="star in 5|range" value="{{star+1}}" aria-label="{{star+1}} stars">{{star+1}}</md-radio-button>
+    			    </md-radio-group>
+    			</md-input-container>
+    			<md-input-container>
+    				<label>Text of your review</label>
+    				<textarea ng-model="review.text" md-maxlength="5000" rows="5" md-select-on-focus required ng-disabled="sending"></textarea>
+    			</md-input-container>
+            </section>
+            <div>
+    			<md-button role="button" class="md-raised" aria-controls="reviewForm" ng-disabled="reviewForm.$invalid || sending" ng-click="saveReview()" id="publishButton">Submit review</md-button>
+    		</div>
 		</form>
 	</md-whiteframe>
 </md-content>
