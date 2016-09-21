@@ -1,6 +1,6 @@
 <md-toolbar class="md-whiteframe-glow-z1 site-content-toolbar">
     <div class="md-toolbar-tools">
-        <h1 tabindex="0">
+        <h1>
             <span>Restaurants</span>
         </h1>
         <span flex></span>
@@ -32,7 +32,7 @@
         	<img ng-src="{{restaurant.image}}" class="md-card-image" aria-hidden="true">
         	<md-card-title>
         		<md-card-title-text>
-        			<h2 class="md-headline" tabindex="0" aria-label="{{restaurant.name}}. {{restaurant.average}} stars by average">
+        			<h2 class="md-headline" aria-label="{{restaurant.name}}. {{restaurant.average}} stars by average">
                         {{restaurant.name}}
                     </h2>
         			<span class="md-subhead">
@@ -41,7 +41,7 @@
         		</md-card-title-text>
         	</md-card-title>
         	<md-card-content>
-        		<p aria-label="Address: {{restaurant.address}}" tabindex="0"><i class="fa fa-map-marker"></i> {{restaurant.address}}</p>
+        		<p aria-label="Address: {{restaurant.address}}"><i class="fa fa-map-marker"></i> {{restaurant.address}}</p>
         	</md-card-content>
         	<md-card-actions layout="row" layout-align="end center">
                 <md-button ng-href="#/restaurant/{{restaurant.id}}" role="button">See reviews</md-button>
