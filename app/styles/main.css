@@ -37,8 +37,8 @@ body {
   border-top: 1px solid #e5e5e5;
 }
 
-.container-narrow > hr {
-  margin: 30px 0;
+.container {
+  width:100%;
 }
 
 md-whiteframe img {
