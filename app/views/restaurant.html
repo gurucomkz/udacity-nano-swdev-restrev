@@ -18,16 +18,28 @@
 		<md-whiteframe class="md-whiteframe-1dp" layout="column">
 			<img ng-src="{{restaurant.image}}" alt="Picture of {{restaurant.name}}" aria-hidden="true">
 			<div  layout="column" layout-padding>
-				<span class="md-headline">{{restaurant.name}}</span>
-				<span class="md-subhead" id="starRating" aria-label="{{restaurant.average}} stars by average">
-					<i ng-repeat="n in restaurant.average|range" class="fa fa-star"></i>
-				</span>
+				<div layout="row">
+					<span class="md-headline" flex>{{restaurant.name}}</span>
+					<span class="md-subhead" id="starRating" aria-label="{{restaurant.average}} stars by average">
+						<i ng-repeat="n in restaurant.average|range" class="fa fa-star"></i>
+					</span>
+				</div>
 				<span class="md-subhead">
 					<i class="fa fa-map-marker"></i>
 					{{restaurant.address}}
 				</span>
 			</div>
-
+			<div layout-padding>
+				<h3 class="md-title">Review stats</h3>
+				<div ng-repeat="(star, num) in restaurant.stats" aria-label="{{num}} reviews with {{star}} stars" aria-atomic="true" layout="row" layout-wrap>
+					<span flex="30">
+						<i ng-repeat="n in star|range" class="fa fa-star"></i>
+					</span>
+					<span>
+						{{num}} reviews
+					</span>
+				</div>
+			</div>
 		</md-whiteframe>
 	</header>
 

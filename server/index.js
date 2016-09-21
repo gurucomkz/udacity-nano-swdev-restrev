@@ -40,10 +40,10 @@ function _getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function restaurantReviews(restId) {
+function restaurantReviews(restId, stars) {
     restId = parseInt(restId);
     return reviews
-            .filter(function(review) { return review.restaurantId == restId; })
+            .filter(function(review) { return review.restaurantId == restId && (stars ? review.stars == stars : true); })
             .map(function(review) {
                 review.reviewer = getReviewer(review.reviewerId);
                 return review;
@@ -106,6 +106,10 @@ function loadRestaurants() {
                 rest.image = myURL + rest.image;
                 rest.average = restaurantAvg(rest.id);
                 rest.reviewsNum = restaurantReviews(rest.id).length;
+                rest.stats = {};
+                for(var s = 1; s<6; s++){
+                    rest.stats[s] = restaurantReviews(rest.id, s).length;
+                }
             });
 
             console.log('restaurants fetched');
