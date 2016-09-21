@@ -2,8 +2,8 @@
     <div class="md-toolbar-tools">
         <h1 tabindex="0">
             <span>Restaurants</span>
-        </h2>
-        <span flex /></span>
+        </h1>
+        <span flex></span>
         <div>
             <md-menu>
                 <md-button aria-controls="restaurantListContainer" aria-label="Open filter options menu" class="md-icon-button" ng-click="openFilterMenu($mdOpenMenu, $event)">
@@ -11,11 +11,11 @@
                 </md-button>
                 <md-menu-content width="4">
                     <md-menu-item>
-                        <md-button ng-click="setFilter(0)">
+                        <md-button ng-click="setFilter(0)" aria-flowto="restaurantListContainer">
                             <md-icon md-menu-align-target class="fa fa-circle-o"></md-icon> Show all restaurants
                         </md-button>
                     </md-menu-item>
-                    <md-menu-item ng-repeat="star in 5|rrange" ng-show="starStats[star+1]" >
+                    <md-menu-item ng-repeat="star in 5|rrange" ng-show="starStats[star+1]" aria-flowto="restaurantListContainer">
                         <md-button ng-click="setFilter(star+1)" aria-label="Show restaurants with {{star+1}}-star average">
                             <md-icon ng-repeat="s in (star+1)|rrange" class="fa fa-star"></md-icon>
                         </md-button>
