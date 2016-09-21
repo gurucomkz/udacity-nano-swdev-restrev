@@ -12,6 +12,12 @@ version 0.15.1.
 
 Run `grunt` for building and `grunt serve` for preview.
 
+## Testing With Chromevox Lite
+
+I've included Chromevox Lite wrapper so any can test ARIA functionality with ease.
+
+Navigate to `test.html` to test with Chromevox Lite.
+
 ## Credits
 
 Avatars [Designed by Freepik and distributed by Flaticon](http://www.flaticon.com/packs/avatar-set)
